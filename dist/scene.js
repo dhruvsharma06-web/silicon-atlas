@@ -1,0 +1,31 @@
+import * as THREE from './vendor/three.module.js';
+export function mountHardware(el,{scrollSection=null}={}){
+ let renderer;try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return()=>{}};
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.setClearColor(0x101110,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.8;el.replaceChildren(renderer.domElement);if(scrollSection)scrollSection.classList.add('is-live');renderer.domElement.setAttribute('aria-label','Illustrative graphics card with twin fans, cooling fins and circuit board');renderer.domElement.setAttribute('role','img');
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(33,1,.1,100),group=new THREE.Group();scene.add(group);camera.position.set(0,0,12);
+ scene.add(new THREE.AmbientLight(0xe9f0dd,1.6));const key=new THREE.DirectionalLight(0xffffff,5);key.position.set(-3,6,6);scene.add(key);const rim=new THREE.DirectionalLight(0xe8bf77,3.5);rim.position.set(5,-2,3);scene.add(rim);const side=new THREE.DirectionalLight(0x9dafa6,3);side.position.set(-5,-3,-2);scene.add(side);
+ const metal=new THREE.MeshStandardMaterial({color:0x5c625a,metalness:.8,roughness:.3}),dark=new THREE.MeshStandardMaterial({color:0x171b18,metalness:.6,roughness:.38}),silver=new THREE.MeshStandardMaterial({color:0xa8afa5,metalness:.8,roughness:.28}),black=new THREE.MeshStandardMaterial({color:0x070a08,roughness:.7}),pcbmat=new THREE.MeshStandardMaterial({color:0x22352b,metalness:.3,roughness:.5}),gold=new THREE.MeshStandardMaterial({color:0xb99756,metalness:.65,roughness:.4});
+ const box=(w,h,d,mat,x=0,y=0,z=0,parent=group)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);parent.add(m);return m};
+ const pcb=new THREE.Group(),cooler=new THREE.Group(),shell=new THREE.Group();group.add(pcb,cooler,shell);
+ box(5.5,2.05,.08,pcbmat,0,0,-.24,pcb);box(5.7,2.2,.12,dark,0,0,-.48,pcb);
+ for(let i=0;i<52;i++)box(.042,.26,.035,gold,-2+i*.075,-1.1,-.22,pcb);
+ box(.85,.85,.12,silver,0,0,-.13,pcb);box(.55,.55,.05,dark,0,0,-.04,pcb);
+ for(let i=0;i<8;i++){const a=i*Math.PI/4;box(.35,.23,.08,black,Math.cos(a)*1.08,Math.sin(a)*.7,-.12,pcb)}
+ for(let i=0;i<36;i++){box(.08,.14,.08,silver,-2.4+(i%12)*.42,(i<12?.83:i<24?-.82:.55),-.12,pcb)}
+ for(let i=0;i<82;i++)box(.027,1.87,.52,metal,-2.65+i*.065,0,.08,cooler);
+ for(let i=0;i<4;i++){const tube=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,5.4,10),gold);tube.rotation.z=Math.PI/2;tube.position.set(0,-.63+i*.42,.36);cooler.add(tube)}
+ box(5.8,.18,.62,silver,0,1.02,.18,shell);box(5.8,.18,.62,silver,0,-1.02,.18,shell);box(.17,2.12,.62,metal,-2.83,0,.18,shell);box(.17,2.12,.62,metal,2.83,0,.18,shell);box(.17,2.05,.15,metal,0,0,.51,shell);
+ for(const x of [-1.4,1.4]){
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.88,.055,12,64),silver);ring.position.set(x,0,.57);shell.add(ring);
+  const disk=new THREE.Mesh(new THREE.CylinderGeometry(.83,.83,.05,64),black);disk.rotation.x=Math.PI/2;disk.position.set(x,0,.43);shell.add(disk);
+  const fan=new THREE.Group();fan.position.set(x,0,.58);shell.add(fan);
+  for(let i=0;i<11;i++){const blade=new THREE.Shape();blade.moveTo(.18,-.06);blade.bezierCurveTo(.4,-.28,.68,-.3,.82,-.1);blade.lineTo(.79,.09);blade.bezierCurveTo(.51,-.03,.37,.16,.18,.08);blade.closePath();const m=new THREE.Mesh(new THREE.ExtrudeGeometry(blade,{depth:.025,bevelEnabled:false}),dark);m.rotation.z=i*Math.PI*2/11;fan.add(m)}
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.23,.23,.09,32),metal);hub.rotation.x=Math.PI/2;hub.position.z=.035;fan.add(hub);
+ }
+ box(.12,2.6,.6,silver,-3,0,-.1);for(let i=0;i<3;i++)box(.13,.3,.16,black,-3.07,-.55+i*.5,-.05);box(.65,.16,.3,black,1.9,1.14,-.12,pcb);
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');let visible=true,pending=0;
+ function render(){pending=0;if(!visible||document.hidden)return;const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.position.z=Math.max(12,3.5/(Math.tan(33*Math.PI/360)*camera.aspect));camera.updateProjectionMatrix();let p=0;if(scrollSection&&!reduced.matches){const r=scrollSection.getBoundingClientRect();p=Math.max(0,Math.min(1,-r.top/Math.max(1,r.height-innerHeight)))}group.rotation.set(.23+p*.2,-.4+p*1.05,-.25+p*.12);group.position.x=scrollSection?-.15:.4;group.scale.setScalar(w<550?.87:1.05);const explode=Math.max(0,(p-.35)/.65);shell.position.z=explode*1.65;cooler.position.z=explode*.65;pcb.position.z=-explode*.7;renderer.render(scene,camera);if(scrollSection){scrollSection.style.setProperty('--progress',p);const bar=scrollSection.querySelector('.progress');if(bar)bar.style.transform=`scaleX(${p})`;const title=scrollSection.querySelector('h2'),copy=scrollSection.querySelector('.film-copy p');if(p<.33){title.textContent='Power. In perspective.';copy.textContent='A graphics card is a system of parts. Scroll to move around the assembly and see what sits beneath the surface.'}else if(p<.68){title.textContent='Built to move heat.';copy.textContent='Fans push air through a dense heatsink. Case airflow and card clearance matter just as much as the slot it fits into.'}else{title.textContent='Know what’s inside.';copy.textContent='The GPU does the computation. Dedicated memory holds working data. Neither capacity nor clock speed alone tells the performance story.'}}}
+ function request(){if(!pending)pending=requestAnimationFrame(render)}const resize=new ResizeObserver(request);resize.observe(el);const observer=new IntersectionObserver(e=>{visible=e[0].isIntersecting;if(visible)request()});observer.observe(el);window.addEventListener('scroll',request,{passive:true});document.addEventListener('visibilitychange',request);reduced.addEventListener('change',request);render();return()=>{cancelAnimationFrame(pending);resize.disconnect();observer.disconnect();window.removeEventListener('scroll',request);document.removeEventListener('visibilitychange',request);reduced.removeEventListener('change',request);scene.traverse(o=>{o.geometry?.dispose()});[metal,dark,silver,black,pcbmat,gold].forEach(m=>m.dispose());renderer.dispose();renderer.domElement.remove()};
+}
+
+
