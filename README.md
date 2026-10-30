@@ -13,10 +13,13 @@ Open http://localhost:4173. Serve over HTTP rather than opening index.html direc
 ## Files
 
 - `dist/app.js`: routes, filters, product dossiers, comparison selection and URL state.
-- `dist/data.js`: 20 manufacturer-sourced records, glossary and source provenance.
+- `dist/data.js`: 43 manufacturer-sourced records (RTX 50, RX 9000, Arc B580, Ryzen 9000, Core Ultra 200S / 200S Plus, plus RTX 40, RX 7000, Ryzen 7000, Core 14th Gen), glossary and source provenance.
+- `dist/art.js`: procedural SVG floorplan illustrations generated from each record (SM/CU/Xe count, memory bus, CCD and P/E-core layout).
+- `dist/fx.js`: motion layer — WebGL shader backdrop, cursor light, magnetic buttons, tilt cards, scroll reveals, count-ups, kinetic type, pinned lineup rail, video reveal.
+- `dist/media/`: original procedurally rendered video loops (`die-flythrough.mp4`, `wafer.mp4`), their posters and the die texture.
 - `dist/types.d.ts`: extensible product, benchmark/test-condition and compatibility types.
 - `dist/rules.js`: transparent upgrade-checklist rules.
-- `dist/scene.js`: original conceptual GPU model and scroll-driven rotation/explosion.
+- `dist/scene.js`: original conceptual GPU model with spinning fans, cycling light bar, particles, pointer parallax and scroll-driven rotation/explosion.
 - `dist/style.css`: responsive layouts and reduced-motion treatment.
 - `dist/vendor/`: locally bundled Three.js 0.170.0 and MIT license.
 - `README-data.md`: verification scope and data limitations.
@@ -30,7 +33,7 @@ The 3D assembly rotates and separates as the visitor scrolls; reverse scrolling 
 
 ## Deliberate data gaps
 
-No fabricated FPS, benchmark rankings, prices, bottleneck scores or automatic compatibility guarantees. Benchmark and live price integrations remain unavailable. The catalogue covers selected established generations, not every latest product. Licensed retail product photography is not included; catalogue drawings are labeled category illustrations. The cinematic asset is real-time conceptual 3D, not generated video or a model-accurate teardown. No external analytics, accounts or backend are needed.
+No fabricated FPS, benchmark rankings, prices, bottleneck scores or automatic compatibility guarantees. Benchmark and live price integrations remain unavailable. The catalogue covers the current desktop generations as of 30 October 2026 plus the previous one; it is not exhaustive. Licensed retail product photography is not included; product art is schematic floorplans generated from specifications, labelled as such. The videos are procedurally rendered illustrations (Python + ffmpeg), not footage of real silicon. Fonts (Archivo, JetBrains Mono) load from Google Fonts and fall back to Arial / Consolas offline. No external analytics, accounts or backend are needed.
 
 ## Maintenance
 

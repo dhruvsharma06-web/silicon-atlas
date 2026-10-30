@@ -1,6 +1,8 @@
 # SILICON ATLAS data
 
-The catalogue contains 10 desktop GPUs and 10 desktop CPUs. It intentionally covers established GeForce RTX 40, Radeon RX 7000, Ryzen 7000 and Intel Core 14th Gen products; it does not claim to cover the latest generation or all available products.
+The catalogue contains 21 desktop GPUs and 22 desktop CPUs. Current generation: GeForce RTX 50 (5090–5050), Radeon RX 9000 (9070 XT, 9070, 9060 XT 16 GB), Arc B580, Ryzen 9000 (including the January 2026 Ryzen 7 9850X3D) and Core Ultra 200S (including the March 2026 Core Ultra 7 270K Plus and Core Ultra 5 250K Plus). Previous generation: GeForce RTX 40, Radeon RX 7000, Ryzen 7000 and Core 14th Gen. As of this snapshot no new desktop GPU generation launched in 2026 (the RTX 50 Super refresh was reported delayed). It does not cover every available product.
+
+RTX 50 values were checked against NVIDIA's comparison page on 30 October 2026. Radeon RX 9000, Ryzen 9000 and Core Ultra values follow manufacturer specifications cross-checked against launch coverage and partner spec tables; the Core Ultra 200S Plus Maximum Turbo Power is left unspecified, and AMD RX 9000 PSU guidance is null because no AMD reference card exists. Recheck these records against the linked manufacturer pages before relying on them.
 
 Manufacturer pages were inspected on 30 October 2026. Each record has an official source URL, a verification date and grouped provenance. AMD and Intel records use individual product pages; NVIDIA records use the official comparison table. Values refer to manufacturer reference configurations unless stated otherwise. Board-partner dimensions, connectors and power limits require a separate exact-variant record.
 

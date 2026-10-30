@@ -2,6 +2,8 @@ export interface SourceReference { group:string; url:string; verified:string }
 export interface ProductVariant { id:string; manufacturer:string; productId:string; image:string|null; length:number|null; slots:number|null; powerConnectors:string|null }
 export interface Product {
  id:string; type:'cpu'|'gpu'; vendor:'AMD'|'Intel'|'NVIDIA'; name:string; generation:string;
+ /** Launch month, 'YYYY-MM' (or 'YYYY' for older records); drives the New / Current gen badges and newest-first sort. */ release:string;
+ /** Execution units used by the floorplan art: CUDA cores (NVIDIA), compute units (AMD), Xe cores (Intel GPU) or CPU cores. */ units:number|null;
  memory:number|null; memoryType:string; power:number; powerLabel:string; socket:string|null;
  cores:number|null; threads:number|null; cache:string|null; igpu:boolean|null;
  psu:number|null; length:number|null; slots:number|null; image:string|null; source:string; verified:string;
